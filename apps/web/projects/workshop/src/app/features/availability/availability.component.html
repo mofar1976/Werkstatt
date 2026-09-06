@@ -1,0 +1,22 @@
+<div class="space-y-4">
+  <div>
+    <h1 class="text-lg font-semibold text-slate-900">Verfügbarkeit</h1>
+    <p class="mt-1 text-sm text-slate-500">
+      Lege freie Zeitfenster an. Kundinnen und Kunden können offene Fenster direkt buchen.
+    </p>
+  </div>
+
+  <ws-slot-form [saving]="facade.saving()" (create)="create($event)" />
+
+  @if (facade.error(); as error) {
+    <bo-alert variant="error">{{ error }}</bo-alert>
+  }
+
+  @if (facade.loading() && facade.slots().length === 0) {
+    <div class="flex justify-center rounded-xl border border-slate-200 bg-white p-10 text-sm text-slate-400">
+      <bo-spinner label="Lädt …" />
+    </div>
+  } @else {
+    <ws-slot-list [slots]="facade.slots()" [saving]="facade.saving()" />
+  }
+</div>

@@ -1,0 +1,69 @@
+<div class="w-full max-w-sm">
+  <div class="lg:hidden">
+    <p class="text-xs font-semibold uppercase tracking-wide text-brand-600">
+      Auto-Werkstatt
+    </p>
+  </div>
+
+  <h1 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900">
+    Konto erstellen
+  </h1>
+  <p class="mt-1 text-sm text-slate-500">
+    In einer Minute registriert – danach direkt Termine buchen.
+  </p>
+
+  <form class="mt-8 space-y-4" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="grid gap-4 sm:grid-cols-2">
+      <bo-text-field
+        [control]="form.controls.firstName"
+        label="Vorname"
+        autocomplete="given-name"
+      />
+      <bo-text-field
+        [control]="form.controls.lastName"
+        label="Nachname"
+        autocomplete="family-name"
+      />
+    </div>
+
+    <bo-text-field
+      [control]="form.controls.email"
+      label="E-Mail"
+      type="email"
+      icon="mail"
+      autocomplete="email"
+      placeholder="name@example.com"
+      errorText="Bitte eine gültige E-Mail-Adresse eingeben."
+    />
+
+    <bo-text-field
+      [control]="form.controls.password"
+      label="Passwort"
+      type="password"
+      icon="lock"
+      autocomplete="new-password"
+      placeholder="Mindestens 8 Zeichen"
+      hint="Mindestens 8 Zeichen."
+    />
+
+    <bo-text-field
+      [control]="form.controls.phone"
+      label="Telefon (optional)"
+      type="tel"
+      autocomplete="tel"
+    />
+
+    @if (error(); as message) {
+      <bo-alert variant="error">{{ message }}</bo-alert>
+    }
+
+    <bo-button type="submit" [loading]="loading()" block>Registrieren</bo-button>
+  </form>
+
+  <p class="mt-8 text-center text-sm text-slate-500">
+    Schon registriert?
+    <a routerLink="/login" class="font-medium text-brand-600 hover:underline">
+      Anmelden
+    </a>
+  </p>
+</div>

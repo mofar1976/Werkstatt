@@ -1,0 +1,24 @@
+@if (link(); as href) {
+  <a
+    [routerLink]="href"
+    class="block rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-brand-300 hover:shadow"
+  >
+    <ng-container [ngTemplateOutlet]="body" />
+  </a>
+} @else {
+  <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <ng-container [ngTemplateOutlet]="body" />
+  </div>
+}
+
+<ng-template #body>
+  <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+    {{ label() }}
+  </p>
+  <p class="mt-1 text-2xl font-semibold tabular-nums text-slate-900">
+    {{ value() }}
+  </p>
+  @if (hint(); as h) {
+    <p class="mt-1 text-xs text-slate-500">{{ h }}</p>
+  }
+</ng-template>

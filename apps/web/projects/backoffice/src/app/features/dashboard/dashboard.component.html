@@ -1,0 +1,72 @@
+<div class="space-y-6">
+  <div>
+    <h1 class="text-lg font-semibold text-slate-900">Übersicht</h1>
+    <p class="mt-1 text-sm text-slate-500">
+      Willkommen zurück, {{ auth.user()?.firstName }}.
+    </p>
+  </div>
+
+  @if (facade.error(); as error) {
+    <bo-alert variant="error">{{ error }}</bo-alert>
+  }
+
+  @if (facade.loading() && !facade.overview()) {
+    <div class="flex justify-center rounded-xl border border-slate-200 bg-white p-10 text-sm text-slate-400">
+      <bo-spinner label="Lädt …" />
+    </div>
+  } @else if (facade.overview(); as overview) {
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <bo-stat-card
+        label="Werkstätten"
+        [value]="overview.workshops.total"
+        [hint]="
+          overview.workshops.active +
+          ' aktiv · ' +
+          overview.workshops.pending +
+          ' ausstehend'
+        "
+        link="/workshops"
+      />
+      <bo-stat-card
+        label="Freischaltung ausstehend"
+        [value]="overview.workshops.pending"
+        hint="Werkstätten warten auf Aktivierung"
+        link="/workshops"
+      />
+      <bo-stat-card
+        label="Kund:innen"
+        [value]="overview.customers.total"
+        [hint]="overview.customers.blocked + ' gesperrt'"
+        link="/customers"
+      />
+      <bo-stat-card
+        label="Marken / Modelle"
+        [value]="overview.catalog.brands + ' / ' + overview.catalog.models"
+        link="/car-catalog"
+      />
+      <bo-stat-card
+        label="Anstehende Termine"
+        [value]="overview.appointments.upcoming"
+        [hint]="overview.appointments.total + ' insgesamt'"
+        link="/appointments"
+      />
+      <bo-stat-card
+        label="Offene Reparaturen"
+        [value]="overview.repairOrders.open"
+        [hint]="overview.repairOrders.total + ' insgesamt'"
+        link="/repairs"
+      />
+      <bo-stat-card
+        label="Angebote zur Freigabe"
+        [value]="overview.repairOrders.awaitingApproval"
+        hint="warten auf Kundenentscheidung"
+        link="/repairs"
+      />
+    </div>
+
+    <div class="grid gap-4 lg:grid-cols-2">
+      <bo-pending-workshops [workshops]="overview.pendingWorkshops" />
+      <bo-recent-appointments [appointments]="overview.recentAppointments" />
+    </div>
+  }
+</div>

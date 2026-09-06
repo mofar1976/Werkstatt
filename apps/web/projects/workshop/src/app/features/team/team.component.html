@@ -1,0 +1,28 @@
+<div class="space-y-4">
+  <div>
+    <h1 class="text-lg font-semibold text-slate-900">Team</h1>
+    <p class="mt-1 text-sm text-slate-500">
+      @if (canManage()) {
+        Mitarbeitende deiner Werkstatt verwalten.
+      } @else {
+        Mitarbeitende deiner Werkstatt. Verwaltung nur durch die Chefin bzw. den Chef.
+      }
+    </p>
+  </div>
+
+  @if (facade.error(); as error) {
+    <bo-alert variant="error">{{ error }}</bo-alert>
+  }
+
+  @if (facade.loading() && facade.members().length === 0) {
+    <div class="flex justify-center rounded-xl border border-slate-200 bg-white p-10 text-sm text-slate-400">
+      <bo-spinner label="Lädt …" />
+    </div>
+  } @else {
+    <ws-team-members
+      [members]="facade.members()"
+      [canManage]="canManage()"
+      [currentUserId]="currentUserId()"
+    />
+  }
+</div>

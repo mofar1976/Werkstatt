@@ -1,0 +1,19 @@
+<div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+  <div class="sm:w-72">
+    <bo-text-field
+      [control]="searchControl"
+      icon="search"
+      placeholder="Name oder Stadt suchen …"
+    />
+  </div>
+
+  <select
+    (change)="onStatus($any($event.target).value)"
+    class="rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-700 shadow-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+  >
+    <option value="">Alle Status</option>
+    @for (status of statuses; track status) {
+      <option [value]="status">{{ labels[status] }}</option>
+    }
+  </select>
+</div>

@@ -1,0 +1,39 @@
+<div class="space-y-4">
+  <div>
+    <h1 class="text-lg font-semibold text-slate-900">Reparaturen</h1>
+    <p class="mt-1 text-sm text-slate-500">
+      Kostenvoranschlag freigeben und den Reparaturfortschritt verfolgen.
+    </p>
+  </div>
+
+  <cu-repair-status-filter
+    [status]="facade.query().status"
+    (statusChange)="facade.setStatus($event)"
+  />
+
+  @if (facade.error(); as error) {
+    <bo-alert variant="error">{{ error }}</bo-alert>
+  }
+
+  <div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
+    @if (facade.loading() && facade.items().length === 0) {
+      <div class="flex justify-center p-10 text-sm text-slate-400">
+        <bo-spinner label="Lädt …" />
+      </div>
+    } @else if (facade.items().length === 0) {
+      <div class="p-10 text-center text-sm text-slate-500">
+        Noch keine Reparaturen. Sobald eine Werkstatt dein Fahrzeug annimmt,
+        erscheint sie hier.
+      </div>
+    } @else {
+      <cu-repairs-list [repairs]="facade.items()" />
+    }
+  </div>
+
+  <bo-pagination
+    [page]="facade.page()"
+    [pageSize]="facade.pageSize()"
+    [total]="facade.total()"
+    (pageChange)="facade.setPage($event)"
+  />
+</div>

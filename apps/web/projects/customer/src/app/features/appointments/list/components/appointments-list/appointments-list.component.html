@@ -1,0 +1,23 @@
+<ul class="divide-y divide-slate-100">
+  @for (appointment of appointments(); track appointment.id) {
+    <li>
+      <a
+        [routerLink]="['/appointments', appointment.id]"
+        class="flex flex-wrap items-center justify-between gap-3 px-4 py-4 transition hover:bg-slate-50"
+      >
+        <div class="min-w-0">
+          <p class="text-sm font-semibold text-slate-900">
+            {{ appointment.workshopName }}
+          </p>
+          <p class="mt-0.5 text-sm tabular-nums text-slate-600">
+            {{ when(appointment.scheduledAt) }}
+          </p>
+          <p class="mt-0.5 text-xs text-slate-400">{{ vehicle(appointment) }}</p>
+        </div>
+        <bo-badge [tone]="tone(appointment.status)">
+          {{ label[appointment.status] }}
+        </bo-badge>
+      </a>
+    </li>
+  }
+</ul>

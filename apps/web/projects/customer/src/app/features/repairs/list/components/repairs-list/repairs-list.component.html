@@ -1,0 +1,25 @@
+<ul class="divide-y divide-slate-100">
+  @for (order of repairs(); track order.id) {
+    <li>
+      <a
+        [routerLink]="['/repairs', order.id]"
+        class="flex flex-wrap items-center justify-between gap-3 px-4 py-4 transition hover:bg-slate-50"
+      >
+        <div class="min-w-0">
+          <p class="text-sm font-semibold text-slate-900">
+            {{ order.workshopName }}
+          </p>
+          <p class="mt-0.5 text-sm text-slate-600">{{ vehicle(order) }}</p>
+          @if (order.status === AwaitingDecision) {
+            <p class="mt-1 text-xs font-medium text-amber-600">
+              Kostenvoranschlag wartet auf deine Freigabe
+            </p>
+          }
+        </div>
+        <bo-badge [tone]="tone[order.status]">
+          {{ label[order.status] }}
+        </bo-badge>
+      </a>
+    </li>
+  }
+</ul>

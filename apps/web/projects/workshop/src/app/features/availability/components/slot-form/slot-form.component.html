@@ -1,0 +1,45 @@
+<form
+  class="flex flex-wrap items-end gap-4 rounded-xl border border-slate-200 bg-white p-5"
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+>
+  <div>
+    <label class="mb-1.5 block text-sm font-medium text-slate-700" for="slot-date">Datum</label>
+    <input
+      id="slot-date"
+      type="date"
+      formControlName="date"
+      [min]="minDate()"
+      class="rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+    />
+  </div>
+
+  <div>
+    <label class="mb-1.5 block text-sm font-medium text-slate-700" for="slot-time">Uhrzeit</label>
+    <input
+      id="slot-time"
+      type="time"
+      formControlName="time"
+      class="rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+    />
+  </div>
+
+  <div>
+    <label class="mb-1.5 block text-sm font-medium text-slate-700" for="slot-duration">Dauer</label>
+    <select
+      id="slot-duration"
+      formControlName="durationMinutes"
+      class="rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-700 shadow-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+    >
+      @for (d of durations; track d) {
+        <option [value]="d">{{ d }} Min.</option>
+      }
+    </select>
+  </div>
+
+  <bo-button type="submit" [loading]="saving()">Fenster anlegen</bo-button>
+
+  @if (localError(); as message) {
+    <p class="w-full text-xs text-red-600">{{ message }}</p>
+  }
+</form>

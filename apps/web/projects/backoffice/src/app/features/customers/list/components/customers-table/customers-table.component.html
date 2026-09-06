@@ -1,0 +1,42 @@
+<div class="overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="border-b border-slate-200 text-left text-xs font-medium uppercase tracking-wide text-slate-400">
+        <th class="px-4 py-3">Name</th>
+        <th class="px-4 py-3">E-Mail</th>
+        <th class="px-4 py-3">Status</th>
+        <th class="px-4 py-3 text-right">Termine</th>
+        <th class="px-4 py-3">Registriert</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (customer of customers(); track customer.id) {
+        <tr class="border-b border-slate-100 last:border-0 hover:bg-slate-50">
+          <td class="px-4 py-3">
+            <a
+              [routerLink]="['/customers', customer.id]"
+              class="font-medium text-slate-900 hover:text-brand-600"
+            >
+              {{ customer.firstName }} {{ customer.lastName }}
+            </a>
+            @if (customer.phone) {
+              <div class="text-xs text-slate-400">{{ customer.phone }}</div>
+            }
+          </td>
+          <td class="px-4 py-3 text-slate-600">{{ customer.email }}</td>
+          <td class="px-4 py-3">
+            <bo-badge [tone]="customer.isActive ? 'green' : 'red'">
+              {{ customer.isActive ? "Aktiv" : "Gesperrt" }}
+            </bo-badge>
+          </td>
+          <td class="px-4 py-3 text-right tabular-nums text-slate-600">
+            {{ customer.appointmentCount }}
+          </td>
+          <td class="px-4 py-3 text-slate-500">
+            {{ customer.createdAt | date: "dd.MM.yyyy" }}
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

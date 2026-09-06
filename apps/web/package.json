@@ -1,0 +1,48 @@
+{
+  "name": "@car-garage/web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "ng": "ng",
+    "dev": "concurrently -n backoffice,customer,workshop -c blue,green,magenta \"pnpm dev:backoffice\" \"pnpm dev:customer\" \"pnpm dev:workshop\"",
+    "dev:backoffice": "ng serve backoffice --port 4200",
+    "dev:customer": "ng serve customer --port 4300",
+    "dev:workshop": "ng serve workshop --port 4400",
+    "build": "ng build backoffice && ng build customer && ng build workshop",
+    "build:backoffice": "ng build backoffice",
+    "build:customer": "ng build customer",
+    "build:workshop": "ng build workshop",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "ng test backoffice --watch=false && ng test customer --watch=false && ng test workshop --watch=false"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "dependencies": {
+    "@angular/common": "^21.2.0",
+    "@angular/compiler": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@angular/forms": "^21.2.0",
+    "@angular/platform-browser": "^21.2.0",
+    "@angular/router": "^21.2.0",
+    "@car-garage/shared": "workspace:*",
+    "@ngrx/effects": "^21.1.1",
+    "@ngrx/operators": "^21.1.1",
+    "@ngrx/store": "^21.1.1",
+    "@ngrx/store-devtools": "^21.1.1",
+    "leaflet": "^1.9.4",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.2.23",
+    "@angular/cli": "^21.2.23",
+    "@angular/compiler-cli": "^21.2.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/leaflet": "^1.9.22",
+    "concurrently": "^9.1.2",
+    "jsdom": "^28.0.0",
+    "prettier": "^3.8.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~5.9.2",
+    "vitest": "^4.0.8"
+  }
+}

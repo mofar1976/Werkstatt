@@ -1,0 +1,34 @@
+<div class="space-y-4">
+  <a routerLink="/workshops" class="text-sm text-brand-600 hover:underline">
+    ← Zurück zur Werkstattsuche
+  </a>
+
+  @if (facade.detailError(); as error) {
+    <bo-alert variant="error">{{ error }}</bo-alert>
+  }
+
+  @if (facade.detailLoading() && !workshop()) {
+    <div class="flex justify-center rounded-xl border border-slate-200 bg-white p-10 text-sm text-slate-400">
+      <bo-spinner label="Lädt …" />
+    </div>
+  } @else if (workshop(); as w) {
+    <cu-workshop-info [workshop]="w" />
+
+    <div class="flex justify-end">
+      <a
+        [routerLink]="['/book', w.id]"
+        class="inline-flex items-center rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
+      >
+        Termin vereinbaren
+      </a>
+    </div>
+
+    @if (w.location) {
+      <cu-workshop-map [workshops]="markers()" [showControls]="false" />
+    } @else {
+      <div class="rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-500">
+        Für diese Werkstatt ist kein Kartenstandort hinterlegt.
+      </div>
+    }
+  }
+</div>

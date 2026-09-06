@@ -1,0 +1,67 @@
+<div class="rounded-xl border border-slate-200 bg-white">
+  <div class="flex items-center justify-between border-b border-slate-100 px-4 py-3">
+    <div class="flex items-center gap-2">
+      <button
+        type="button"
+        aria-label="Vorheriger Monat"
+        class="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100"
+        (click)="monthShift.emit(-1)"
+      >
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m15 18-6-6 6-6" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        aria-label="Nächster Monat"
+        class="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100"
+        (click)="monthShift.emit(1)"
+      >
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m9 18 6-6-6-6" />
+        </svg>
+      </button>
+      <h2 class="ml-1 text-sm font-semibold capitalize text-slate-900">{{ title() }}</h2>
+    </div>
+    @if (loading()) {
+      <span class="text-slate-400"><bo-spinner /></span>
+    }
+  </div>
+
+  <div class="grid grid-cols-7 border-b border-slate-100 text-center text-xs font-medium uppercase tracking-wide text-slate-400">
+    @for (wd of weekdays; track wd) {
+      <div class="px-1 py-2">{{ wd }}</div>
+    }
+  </div>
+
+  <div class="grid grid-cols-7">
+    @for (week of weeks(); track $index) {
+      @for (cell of week; track $index) {
+        <div
+          class="min-h-24 border-b border-r border-slate-100 p-1.5 last:border-r-0 [&:nth-child(7n)]:border-r-0"
+          [class.bg-slate-50]="!cell.date"
+        >
+          @if (cell.date) {
+            <div
+              class="mb-1 text-xs font-medium"
+              [class]="cell.isToday ? 'inline-flex h-5 w-5 items-center justify-center rounded-full bg-brand-600 text-white' : 'text-slate-400'"
+            >
+              {{ cell.day }}
+            </div>
+            <div class="space-y-1">
+              @for (a of cell.appointments; track a.id) {
+                <a
+                  [routerLink]="['/appointments', a.id]"
+                  [class]="'block truncate rounded px-1.5 py-0.5 text-[11px] leading-tight transition ' + chipClass(a)"
+                  [title]="chipLabel(a)"
+                >
+                  {{ chipLabel(a) }}
+                </a>
+              }
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+</div>

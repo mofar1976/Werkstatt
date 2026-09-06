@@ -1,0 +1,11 @@
+<div class="flex min-h-screen bg-slate-50">
+  <bo-sidebar [open]="sidebarOpen()" (closed)="sidebarOpen.set(false)" />
+
+  <div class="flex min-w-0 flex-1 flex-col">
+    <bo-topbar (menuClick)="sidebarOpen.set(true)" />
+
+    <main class="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6">
+      <router-outlet />
+    </main>
+  </div>
+</div>

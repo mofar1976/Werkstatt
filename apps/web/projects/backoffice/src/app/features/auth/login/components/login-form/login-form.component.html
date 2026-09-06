@@ -1,0 +1,46 @@
+<div class="w-full max-w-sm">
+  <div class="lg:hidden">
+    <p class="text-xs font-semibold uppercase tracking-wide text-brand-600">
+      Auto-Werkstatt
+    </p>
+  </div>
+
+  <h1 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900">
+    Willkommen zurück
+  </h1>
+  <p class="mt-1 text-sm text-slate-500">
+    Melde dich mit deinem Administrator-Konto an.
+  </p>
+
+  <form class="mt-8 space-y-5" [formGroup]="form" (ngSubmit)="submit()">
+    <bo-text-field
+      [control]="form.controls.email"
+      label="E-Mail"
+      type="email"
+      icon="mail"
+      autocomplete="username"
+      placeholder="name@werkstatt.de"
+      errorText="Bitte eine gültige E-Mail-Adresse eingeben."
+    />
+
+    <bo-text-field
+      [control]="form.controls.password"
+      label="Passwort"
+      type="password"
+      icon="lock"
+      autocomplete="current-password"
+      placeholder="••••••••"
+      errorText="Bitte ein Passwort eingeben."
+    />
+
+    @if (error(); as message) {
+      <bo-alert variant="error">{{ message }}</bo-alert>
+    }
+
+    <bo-button type="submit" [loading]="loading()" block>Anmelden</bo-button>
+  </form>
+
+  <p class="mt-8 text-center text-xs text-slate-400">
+    Zugang nur für autorisierte Administratoren.
+  </p>
+</div>

@@ -1,0 +1,90 @@
+<div class="rounded-xl border border-slate-200 bg-white">
+  <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+    <div>
+      <h2 class="text-sm font-semibold text-slate-900">Mitarbeiter</h2>
+      <p class="text-xs text-slate-400">
+        {{ members().length }} {{ members().length === 1 ? "Person" : "Personen" }}
+      </p>
+    </div>
+    <bo-button variant="secondary" size="sm" (click)="showForm.set(!showForm())">
+      {{ showForm() ? "Abbrechen" : "Mitarbeiter hinzufügen" }}
+    </bo-button>
+  </div>
+
+  @if (showForm()) {
+    <form
+      class="grid gap-4 border-b border-slate-100 bg-slate-50 px-6 py-5 sm:grid-cols-2"
+      [formGroup]="form"
+      (ngSubmit)="add()"
+    >
+      <bo-text-field [control]="form.controls.firstName" label="Vorname" />
+      <bo-text-field [control]="form.controls.lastName" label="Nachname" />
+      <bo-text-field [control]="form.controls.email" label="E-Mail" type="email" icon="mail" />
+      <bo-text-field
+        [control]="form.controls.password"
+        label="Initiales Passwort"
+        type="password"
+        icon="lock"
+      />
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-slate-700" for="role">Rolle</label>
+        <select
+          id="role"
+          formControlName="role"
+          class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+        >
+          <option [value]="WorkshopRole.MEMBER">Mechaniker</option>
+          <option [value]="WorkshopRole.CHEF">Chef</option>
+        </select>
+      </div>
+      <div class="flex items-end">
+        <bo-button type="submit" size="sm" [loading]="facade.saving()">
+          Hinzufügen
+        </bo-button>
+      </div>
+    </form>
+  }
+
+  @if (members().length === 0) {
+    <p class="px-6 py-8 text-center text-sm text-slate-500">
+      Noch keine Mitarbeiter.
+    </p>
+  } @else {
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <tbody>
+          @for (member of members(); track member.id) {
+            <tr class="border-b border-slate-100 last:border-0">
+              <td class="px-6 py-3">
+                <div class="font-medium text-slate-900">
+                  {{ member.user.firstName }} {{ member.user.lastName }}
+                </div>
+                <div class="text-xs text-slate-400">{{ member.user.email }}</div>
+              </td>
+              <td class="px-6 py-3">
+                <bo-badge [tone]="member.role === WorkshopRole.CHEF ? 'blue' : 'gray'">
+                  {{ member.role === WorkshopRole.CHEF ? "Chef" : "Mechaniker" }}
+                </bo-badge>
+              </td>
+              <td class="px-6 py-3 text-right">
+                <div class="flex justify-end gap-2">
+                  <bo-button
+                    variant="ghost"
+                    size="sm"
+                    [disabled]="member.role === WorkshopRole.CHEF && chefCount() <= 1"
+                    (click)="toggleRole(member)"
+                  >
+                    {{ member.role === WorkshopRole.CHEF ? "Zu Mechaniker" : "Zum Chef" }}
+                  </bo-button>
+                  <bo-button variant="ghost" size="sm" (click)="remove(member)">
+                    Entfernen
+                  </bo-button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

@@ -1,0 +1,9 @@
+:host {
+  display: block;
+}
+
+/* Leaflet paints its own controls; keep them below our overlay bar. */
+:host ::ng-deep .leaflet-top,
+:host ::ng-deep .leaflet-bottom {
+  z-index: 400;
+}

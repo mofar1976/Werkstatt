@@ -1,0 +1,52 @@
+<div class="space-y-4">
+  <div class="flex flex-wrap items-start justify-between gap-3">
+    <div>
+      <h1 class="text-lg font-semibold text-slate-900">Reparaturen</h1>
+      <p class="mt-1 text-sm text-slate-500">
+        Befund erstellen, Kostenvoranschlag senden, Reparatur begleiten.
+      </p>
+    </div>
+    <bo-button variant="secondary" size="sm" (click)="toggleNewOrder()">
+      {{ showNewOrder() ? "Schließen" : "Neuer Auftrag" }}
+    </bo-button>
+  </div>
+
+  @if (showNewOrder()) {
+    <ws-new-order-panel
+      [candidates]="facade.candidates()"
+      [loading]="facade.candidatesLoading()"
+      [saving]="facade.saving()"
+      (pick)="pick($event)"
+    />
+  }
+
+  <ws-repair-orders-toolbar (statusChange)="facade.setStatus($event)" />
+
+  @if (facade.error(); as error) {
+    <bo-alert variant="error">{{ error }}</bo-alert>
+  }
+  @if (facade.detailError(); as error) {
+    <bo-alert variant="error">{{ error }}</bo-alert>
+  }
+
+  <div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
+    @if (facade.loading() && facade.items().length === 0) {
+      <div class="flex justify-center p-10 text-sm text-slate-400">
+        <bo-spinner label="Lädt …" />
+      </div>
+    } @else if (facade.items().length === 0) {
+      <div class="p-10 text-center text-sm text-slate-500">
+        Noch keine Reparaturaufträge. Lege einen aus einem Termin an.
+      </div>
+    } @else {
+      <ws-repair-orders-table [orders]="facade.items()" />
+    }
+  </div>
+
+  <bo-pagination
+    [page]="facade.page()"
+    [pageSize]="facade.pageSize()"
+    [total]="facade.total()"
+    (pageChange)="facade.setPage($event)"
+  />
+</div>

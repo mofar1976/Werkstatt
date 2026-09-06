@@ -1,0 +1,35 @@
+<bo-card heading="Logo">
+  <div class="flex items-center gap-5">
+    <div class="flex h-20 w-20 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50 p-2">
+      @if (logoUrl(); as url) {
+        <img [src]="url" alt="Logo" class="h-full w-full object-contain" />
+      } @else {
+        <span class="text-xs text-slate-400">Kein Logo</span>
+      }
+    </div>
+
+    <div class="space-y-2">
+      <label
+        class="inline-flex cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50"
+        [class.pointer-events-none]="saving()"
+        [class.opacity-50]="saving()"
+      >
+        {{ logoUrl() ? "Logo ersetzen" : "Logo hochladen" }}
+        <input type="file" accept="image/*" class="hidden" (change)="onFile($event)" />
+      </label>
+
+      @if (logoUrl()) {
+        <button
+          type="button"
+          class="block text-sm text-red-600 hover:underline disabled:opacity-50"
+          [disabled]="saving()"
+          (click)="remove()"
+        >
+          Logo entfernen
+        </button>
+      }
+
+      <p class="text-xs text-slate-400">PNG, JPG oder SVG. Max. 2 MB.</p>
+    </div>
+  </div>
+</bo-card>

@@ -1,0 +1,24 @@
+@if (days().length === 0) {
+  <p class="rounded-lg border border-slate-200 bg-slate-50 px-4 py-6 text-center text-sm text-slate-500">
+    Diese Werkstatt hat aktuell keine freien Termine.
+  </p>
+} @else {
+  <div class="space-y-4">
+    @for (day of days(); track day.key) {
+      <div>
+        <p class="text-sm font-medium text-slate-900">{{ day.label }}</p>
+        <div class="mt-2 flex flex-wrap gap-2">
+          @for (slot of day.slots; track slot.id) {
+            <button
+              type="button"
+              [class]="slotClass(slot.id)"
+              (click)="select.emit(slot.id)"
+            >
+              {{ time(slot.startsAt) }}–{{ time(slot.endsAt) }}
+            </button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+}

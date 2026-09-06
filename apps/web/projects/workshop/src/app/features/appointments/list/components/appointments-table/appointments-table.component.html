@@ -1,0 +1,40 @@
+<div class="overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="border-b border-slate-200 text-left text-xs font-medium uppercase tracking-wide text-slate-400">
+        <th class="px-4 py-3">Termin</th>
+        <th class="px-4 py-3">Kundschaft</th>
+        <th class="px-4 py-3">Fahrzeug</th>
+        <th class="px-4 py-3">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (appointment of appointments(); track appointment.id) {
+        <tr class="border-b border-slate-100 last:border-0 hover:bg-slate-50">
+          <td class="px-4 py-3">
+            <a
+              [routerLink]="['/appointments', appointment.id]"
+              class="font-medium tabular-nums text-slate-900 hover:text-brand-600"
+            >
+              {{ when(appointment.scheduledAt) }}
+            </a>
+          </td>
+          <td class="px-4 py-3 text-slate-600">
+            {{ customerName(appointment) }}
+          </td>
+          <td class="px-4 py-3 text-slate-600">
+            {{ appointment.vehicle.brandName }} {{ appointment.vehicle.modelName }}
+            @if (appointment.vehicle.licensePlate) {
+              <span class="text-xs text-slate-400">· {{ appointment.vehicle.licensePlate }}</span>
+            }
+          </td>
+          <td class="px-4 py-3">
+            <bo-badge [tone]="tone(appointment.status)">
+              {{ label[appointment.status] }}
+            </bo-badge>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

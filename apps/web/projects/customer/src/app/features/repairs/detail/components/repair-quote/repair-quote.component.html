@@ -1,0 +1,65 @@
+<div class="rounded-xl border border-slate-200 bg-white p-6">
+  <h3 class="text-sm font-semibold text-slate-900">Kostenvoranschlag</h3>
+
+  @if (quote().lineItems.length === 0) {
+    <p class="mt-3 text-sm text-slate-400">Noch keine Positionen.</p>
+  } @else {
+    <div class="mt-3 overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-slate-200 text-left text-xs font-medium uppercase tracking-wide text-slate-400">
+            <th class="py-2 pr-3">Position</th>
+            <th class="py-2 pr-3">Art</th>
+            <th class="py-2 pr-3 text-right">Menge</th>
+            <th class="py-2 pr-3 text-right">Einzelpreis</th>
+            <th class="py-2 text-right">Summe</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of quote().lineItems; track $index) {
+            <tr class="border-b border-slate-100 last:border-0">
+              <td class="py-2 pr-3 text-slate-700">{{ item.description }}</td>
+              <td class="py-2 pr-3 text-slate-500">{{ lineLabel(item) }}</td>
+              <td class="py-2 pr-3 text-right tabular-nums text-slate-600">
+                {{ item.quantity }} {{ unit(item) }}
+              </td>
+              <td class="py-2 pr-3 text-right tabular-nums text-slate-600">
+                {{ eur(item.unitPriceCents) }}
+              </td>
+              <td class="py-2 text-right tabular-nums font-medium text-slate-800">
+                {{ eur(item.lineTotalCents) }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <dl class="mt-4 ml-auto max-w-xs space-y-1 text-sm">
+      <div class="flex justify-between">
+        <dt class="text-slate-500">Netto</dt>
+        <dd class="tabular-nums text-slate-700">{{ eur(quote().netCents) }}</dd>
+      </div>
+      <div class="flex justify-between">
+        <dt class="text-slate-500">MwSt ({{ quote().taxRatePercent }} %)</dt>
+        <dd class="tabular-nums text-slate-700">{{ eur(quote().taxCents) }}</dd>
+      </div>
+      <div class="flex justify-between border-t border-slate-200 pt-1 text-base font-semibold text-slate-900">
+        <dt>Gesamt</dt>
+        <dd class="tabular-nums">{{ eur(quote().grossCents) }}</dd>
+      </div>
+    </dl>
+  }
+
+  @if (quote().notes; as notes) {
+    <p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm text-slate-600">
+      {{ notes }}
+    </p>
+  }
+
+  @if (quote().status === "REJECTED" && quote().rejectionReason) {
+    <p class="mt-3 text-sm text-red-600">
+      Abgelehnt: „{{ quote().rejectionReason }}"
+    </p>
+  }
+</div>

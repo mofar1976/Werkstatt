@@ -1,0 +1,42 @@
+<div class="overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="border-b border-slate-200 text-left text-xs font-medium uppercase tracking-wide text-slate-400">
+        <th class="px-4 py-3">Name</th>
+        <th class="px-4 py-3">Stadt</th>
+        <th class="px-4 py-3">Status</th>
+        <th class="px-4 py-3 text-right">Mitarbeiter</th>
+        <th class="px-4 py-3">Angelegt</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (workshop of workshops(); track workshop.id) {
+        <tr class="border-b border-slate-100 last:border-0 hover:bg-slate-50">
+          <td class="px-4 py-3">
+            <a
+              [routerLink]="['/workshops', workshop.id]"
+              class="font-medium text-slate-900 hover:text-brand-600"
+            >
+              {{ workshop.name }}
+            </a>
+            <div class="text-xs text-slate-400">{{ workshop.slug }}</div>
+          </td>
+          <td class="px-4 py-3 text-slate-600">
+            {{ workshop.address.postalCode }} {{ workshop.address.city }}
+          </td>
+          <td class="px-4 py-3">
+            <bo-badge [tone]="tone(workshop.status)">
+              {{ label[workshop.status] }}
+            </bo-badge>
+          </td>
+          <td class="px-4 py-3 text-right tabular-nums text-slate-600">
+            {{ workshop.memberCount }}
+          </td>
+          <td class="px-4 py-3 text-slate-500">
+            {{ workshop.createdAt | date: "dd.MM.yyyy" }}
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

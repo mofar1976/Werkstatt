@@ -1,0 +1,31 @@
+<div class="space-y-4">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <bo-brands-toolbar (searchChange)="facade.setSearch($event)" />
+    <bo-button routerLink="/car-catalog/new">Neue Marke</bo-button>
+  </div>
+
+  @if (facade.error(); as error) {
+    <bo-alert variant="error">{{ error }}</bo-alert>
+  }
+
+  <div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
+    @if (facade.loading() && facade.brands().length === 0) {
+      <div class="flex justify-center p-10 text-sm text-slate-400">
+        <bo-spinner label="Lädt …" />
+      </div>
+    } @else if (facade.brands().length === 0) {
+      <div class="p-10 text-center text-sm text-slate-500">
+        Keine Marken gefunden.
+      </div>
+    } @else {
+      <bo-brands-table [brands]="facade.brands()" />
+    }
+  </div>
+
+  <bo-pagination
+    [page]="facade.page()"
+    [pageSize]="facade.pageSize()"
+    [total]="facade.total()"
+    (pageChange)="facade.setPage($event)"
+  />
+</div>

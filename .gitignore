@@ -1,0 +1,38 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# build output
+dist/
+out/
+build/
+tmp/
+
+# angular
+.angular/
+
+# turbo
+.turbo/
+
+# env / local credentials
+.env
+.env.local
+.env.*.local
+data.txt
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# editor / os
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# test / coverage
+coverage/
+
+# docker volumes (if bind-mounted locally)
+.data/

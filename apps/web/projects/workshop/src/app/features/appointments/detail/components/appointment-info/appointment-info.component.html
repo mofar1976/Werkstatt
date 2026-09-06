@@ -1,0 +1,73 @@
+<div class="space-y-4">
+  <div class="rounded-xl border border-slate-200 bg-white p-6">
+    <div class="flex flex-wrap items-start justify-between gap-3">
+      <div>
+        <h2 class="text-base font-semibold text-slate-900">
+          {{ when(appointment().scheduledAt) }}
+        </h2>
+        <p class="mt-0.5 text-xs text-slate-400">{{ appointment().workshopName }}</p>
+      </div>
+      <bo-badge [tone]="tone(appointment().status)">
+        {{ label[appointment().status] }}
+      </bo-badge>
+    </div>
+
+    @if (appointment().status === "CANCELLED") {
+      <div class="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+        Storniert von
+        {{ appointment().cancelledBy === Actor.WORKSHOP ? "der Werkstatt" : "der Kundschaft" }}@if (appointment().cancelReason) {
+          <span> – „{{ appointment().cancelReason }}"</span>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div class="rounded-xl border border-slate-200 bg-white p-6">
+      <h3 class="text-sm font-semibold text-slate-900">Kundschaft</h3>
+      @if (appointment().customer; as c) {
+        <dl class="mt-3 space-y-2 text-sm">
+          <div>
+            <dt class="text-xs uppercase tracking-wide text-slate-400">Name</dt>
+            <dd class="text-slate-700">{{ c.firstName }} {{ c.lastName }}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-wide text-slate-400">E-Mail</dt>
+            <dd class="text-slate-700">{{ c.email }}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-wide text-slate-400">Telefon</dt>
+            <dd class="text-slate-700">{{ c.phone || "—" }}</dd>
+          </div>
+        </dl>
+      } @else {
+        <p class="mt-3 text-sm text-slate-400">Keine Kontaktdaten verfügbar.</p>
+      }
+    </div>
+
+    <div class="rounded-xl border border-slate-200 bg-white p-6">
+      <h3 class="text-sm font-semibold text-slate-900">Fahrzeug</h3>
+      <dl class="mt-3 space-y-2 text-sm">
+        <div>
+          <dt class="text-xs uppercase tracking-wide text-slate-400">Modell</dt>
+          <dd class="text-slate-700">
+            {{ appointment().vehicle.brandName }} {{ appointment().vehicle.modelName }}
+          </dd>
+        </div>
+        <div>
+          <dt class="text-xs uppercase tracking-wide text-slate-400">Kennzeichen</dt>
+          <dd class="text-slate-700">
+            {{ appointment().vehicle.licensePlate || "—" }}
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+  <div class="rounded-xl border border-slate-200 bg-white p-6">
+    <h3 class="text-sm font-semibold text-slate-900">Problembeschreibung</h3>
+    <p class="mt-2 whitespace-pre-line text-sm text-slate-700">
+      {{ appointment().problemDescription }}
+    </p>
+  </div>
+</div>

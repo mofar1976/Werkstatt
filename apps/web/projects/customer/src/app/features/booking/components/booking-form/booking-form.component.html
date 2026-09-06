@@ -1,0 +1,72 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+  <div class="grid gap-4 sm:grid-cols-2">
+    <label class="block">
+      <span class="text-sm font-medium text-slate-700">Marke</span>
+      <select
+        formControlName="brandId"
+        class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+      >
+        <option value="" disabled>Marke wählen</option>
+        @for (brand of brands(); track brand.id) {
+          <option [value]="brand.id">{{ brand.name }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="block">
+      <span class="text-sm font-medium text-slate-700">Modell</span>
+      <select
+        formControlName="modelId"
+        class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 disabled:bg-slate-50 disabled:text-slate-400"
+      >
+        <option value="" disabled>
+          {{ modelsLoading() ? "Modelle werden geladen …" : "Modell wählen" }}
+        </option>
+        @for (model of models(); track model.id) {
+          <option [value]="model.id">{{ model.name }}</option>
+        }
+      </select>
+    </label>
+  </div>
+
+  <label class="block">
+    <span class="text-sm font-medium text-slate-700">
+      Kennzeichen <span class="text-slate-400">(optional)</span>
+    </span>
+    <input
+      formControlName="licensePlate"
+      placeholder="z. B. B-MM 1234"
+      class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+    />
+  </label>
+
+  <label class="block">
+    <span class="text-sm font-medium text-slate-700">Problembeschreibung</span>
+    <textarea
+      formControlName="problemDescription"
+      rows="4"
+      placeholder="Was ist mit dem Fahrzeug? Welche Geräusche, seit wann, unter welchen Bedingungen?"
+      class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+    ></textarea>
+    @if (
+      form.controls.problemDescription.touched &&
+      form.controls.problemDescription.invalid
+    ) {
+      <span class="mt-1 block text-xs text-red-600">
+        Bitte beschreibe das Problem (mindestens 5 Zeichen).
+      </span>
+    }
+  </label>
+
+  @if (slotMissing()) {
+    <p class="text-xs text-slate-500">Bitte oben einen Termin auswählen.</p>
+  }
+
+  <bo-button
+    type="submit"
+    [loading]="submitting()"
+    [disabled]="slotMissing()"
+  >
+    Termin verbindlich buchen
+  </bo-button>
+</form>

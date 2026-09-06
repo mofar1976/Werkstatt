@@ -1,0 +1,42 @@
+<div class="overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="border-b border-slate-200 text-left text-xs font-medium uppercase tracking-wide text-slate-400">
+        <th class="px-4 py-3">Kundschaft</th>
+        <th class="px-4 py-3">Fahrzeug</th>
+        <th class="px-4 py-3">Status</th>
+        <th class="px-4 py-3 text-right">Angebot</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (order of orders(); track order.id) {
+        <tr class="border-b border-slate-100 last:border-0 hover:bg-slate-50">
+          <td class="px-4 py-3">
+            <a
+              [routerLink]="['/repair-orders', order.id]"
+              class="font-medium text-slate-900 hover:text-brand-600"
+            >
+              {{ customerName(order) }}
+            </a>
+          </td>
+          <td class="px-4 py-3 text-slate-600">
+            {{ order.vehicle.brandName }} {{ order.vehicle.modelName }}
+            @if (order.vehicle.licensePlate) {
+              <span class="text-xs text-slate-400">· {{ order.vehicle.licensePlate }}</span>
+            }
+          </td>
+          <td class="px-4 py-3">
+            <bo-badge [tone]="tone(order.status)">{{ label[order.status] }}</bo-badge>
+          </td>
+          <td class="px-4 py-3 text-right tabular-nums text-slate-600">
+            @if (order.quote.status !== "DRAFT") {
+              {{ eur(order.quote.grossCents) }}
+            } @else {
+              —
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

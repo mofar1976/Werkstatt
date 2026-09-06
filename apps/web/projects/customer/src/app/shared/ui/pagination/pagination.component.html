@@ -1,0 +1,29 @@
+<div class="flex items-center justify-between gap-3 text-sm text-slate-500">
+  <span>
+    @if (total() > 0) {
+      {{ from() }}–{{ to() }} von {{ total() }}
+    } @else {
+      0 Einträge
+    }
+  </span>
+
+  <div class="flex items-center gap-2">
+    <bo-button
+      variant="secondary"
+      size="sm"
+      [disabled]="page() <= 1"
+      (click)="prev()"
+    >
+      Zurück
+    </bo-button>
+    <span class="tabular-nums">{{ page() }} / {{ lastPage() }}</span>
+    <bo-button
+      variant="secondary"
+      size="sm"
+      [disabled]="page() >= lastPage()"
+      (click)="next()"
+    >
+      Weiter
+    </bo-button>
+  </div>
+</div>

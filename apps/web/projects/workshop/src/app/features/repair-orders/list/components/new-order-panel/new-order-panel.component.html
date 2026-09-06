@@ -1,0 +1,39 @@
+<div class="rounded-xl border border-slate-200 bg-white">
+  <div class="border-b border-slate-100 px-5 py-3">
+    <h2 class="text-sm font-semibold text-slate-900">Auftrag aus einem Termin anlegen</h2>
+    <p class="text-xs text-slate-400">
+      Bestätigte Termine ohne Reparaturauftrag. Auto ist da? Termin auswählen.
+    </p>
+  </div>
+
+  @if (loading() && candidates().length === 0) {
+    <div class="flex justify-center p-8 text-sm text-slate-400">
+      <bo-spinner label="Lädt …" />
+    </div>
+  } @else if (candidates().length === 0) {
+    <p class="p-8 text-center text-sm text-slate-500">
+      Keine offenen Termine. Neue Termine erscheinen hier automatisch.
+    </p>
+  } @else {
+    <ul class="divide-y divide-slate-100">
+      @for (a of candidates(); track a.id) {
+        <li>
+          <button
+            type="button"
+            class="flex w-full flex-wrap items-center gap-x-3 gap-y-1 px-5 py-3 text-left text-sm hover:bg-slate-50 disabled:opacity-50"
+            [disabled]="saving()"
+            (click)="pick.emit(a.id)"
+          >
+            <span class="font-medium tabular-nums text-slate-900">{{ when(a.scheduledAt) }}</span>
+            <span class="text-slate-600">{{ customerName(a) }}</span>
+            <span class="text-slate-500">
+              {{ a.vehicle.brandName }} {{ a.vehicle.modelName }}
+              @if (a.vehicle.licensePlate) { · {{ a.vehicle.licensePlate }} }
+            </span>
+            <span class="ml-auto text-xs text-slate-400">{{ statusLabel[a.status] }}</span>
+          </button>
+        </li>
+      }
+    </ul>
+  }
+</div>

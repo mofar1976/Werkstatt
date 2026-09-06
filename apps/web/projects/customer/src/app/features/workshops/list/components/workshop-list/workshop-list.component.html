@@ -1,0 +1,27 @@
+<ul class="space-y-3">
+  @for (w of workshops(); track w.id) {
+    <li>
+      <button type="button" [class]="cardClass(w.id)" (click)="select.emit(w.id)">
+        <p class="text-sm font-semibold text-slate-900">{{ w.name }}</p>
+        <p class="mt-1 text-sm text-slate-500">{{ address(w) }}</p>
+
+        <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-400">
+          @if (w.phone) {
+            <span>{{ w.phone }}</span>
+          }
+          @if (!w.location) {
+            <span class="text-amber-600">Kein Kartenstandort hinterlegt</span>
+          }
+        </div>
+
+        <a
+          [routerLink]="['/workshops', w.id]"
+          (click)="$event.stopPropagation()"
+          class="mt-3 inline-block text-sm font-semibold text-brand-600 hover:underline"
+        >
+          Details ansehen →
+        </a>
+      </button>
+    </li>
+  }
+</ul>

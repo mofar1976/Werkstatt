@@ -1,0 +1,31 @@
+<div class="rounded-xl border border-slate-200 bg-white p-6">
+  <div class="flex flex-wrap items-start justify-between gap-3">
+    <h2 class="text-lg font-semibold text-slate-900">
+      {{ customer().firstName }} {{ customer().lastName }}
+    </h2>
+    <bo-badge [tone]="customer().isActive ? 'green' : 'red'">
+      {{ customer().isActive ? "Aktiv" : "Gesperrt" }}
+    </bo-badge>
+  </div>
+
+  <dl class="mt-5 grid gap-x-8 gap-y-3 text-sm sm:grid-cols-2">
+    <div>
+      <dt class="text-xs uppercase tracking-wide text-slate-400">E-Mail</dt>
+      <dd class="text-slate-700">{{ customer().email }}</dd>
+    </div>
+    <div>
+      <dt class="text-xs uppercase tracking-wide text-slate-400">Telefon</dt>
+      <dd class="text-slate-700">{{ customer().phone || "—" }}</dd>
+    </div>
+    <div>
+      <dt class="text-xs uppercase tracking-wide text-slate-400">Termine</dt>
+      <dd class="text-slate-700 tabular-nums">{{ customer().appointmentCount }}</dd>
+    </div>
+    <div>
+      <dt class="text-xs uppercase tracking-wide text-slate-400">Registriert</dt>
+      <dd class="text-slate-700">
+        {{ customer().createdAt | date: "dd.MM.yyyy HH:mm" }}
+      </dd>
+    </div>
+  </dl>
+</div>

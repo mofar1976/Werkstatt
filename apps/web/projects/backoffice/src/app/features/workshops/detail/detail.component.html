@@ -1,0 +1,34 @@
+<div class="space-y-4">
+  <a routerLink="/workshops" class="text-sm text-brand-600 hover:underline">
+    ← Zurück zur Liste
+  </a>
+
+  @if (facade.detailError(); as error) {
+    <bo-alert variant="error">{{ error }}</bo-alert>
+  }
+
+  @if (facade.detailLoading() && !workshop()) {
+    <div class="flex justify-center rounded-xl border border-slate-200 bg-white p-10 text-sm text-slate-400">
+      <bo-spinner label="Lädt …" />
+    </div>
+  } @else if (workshop(); as w) {
+    <div class="flex flex-wrap items-center justify-end gap-2">
+      <bo-button variant="secondary" size="sm" [routerLink]="['/workshops', w.id, 'edit']">
+        Bearbeiten
+      </bo-button>
+      <bo-button
+        variant="secondary"
+        size="sm"
+        [loading]="facade.saving()"
+        (click)="toggleStatus()"
+      >
+        {{ isActive() ? "Deaktivieren" : "Aktivieren" }}
+      </bo-button>
+      <bo-button variant="danger" size="sm" (click)="remove()">Löschen</bo-button>
+    </div>
+
+    <bo-workshop-info [workshop]="w" />
+
+    <bo-workshop-members [workshopId]="w.id" [members]="facade.members()" />
+  }
+</div>

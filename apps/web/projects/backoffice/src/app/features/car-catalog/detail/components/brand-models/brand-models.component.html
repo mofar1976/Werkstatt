@@ -1,0 +1,59 @@
+<div class="rounded-xl border border-slate-200 bg-white">
+  <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+    <div>
+      <h2 class="text-sm font-semibold text-slate-900">Modelle</h2>
+      <p class="text-xs text-slate-400">
+        {{ models().length }} {{ models().length === 1 ? "Modell" : "Modelle" }}
+      </p>
+    </div>
+    <bo-button variant="secondary" size="sm" (click)="showForm.set(!showForm())">
+      {{ showForm() ? "Abbrechen" : "Modell hinzufügen" }}
+    </bo-button>
+  </div>
+
+  @if (showForm()) {
+    <form
+      class="flex flex-wrap items-end gap-4 border-b border-slate-100 bg-slate-50 px-6 py-5"
+      [formGroup]="form"
+      (ngSubmit)="add()"
+    >
+      <div class="w-64">
+        <bo-text-field
+          [control]="form.controls.name"
+          label="Modellname"
+          placeholder="z. B. 7er Reihe"
+        />
+      </div>
+      <bo-button type="submit" size="sm" [loading]="saving()">Hinzufügen</bo-button>
+    </form>
+  }
+
+  @if (models().length === 0) {
+    <p class="px-6 py-8 text-center text-sm text-slate-500">Noch keine Modelle.</p>
+  } @else {
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <tbody>
+          @for (model of models(); track model.id) {
+            <tr class="border-b border-slate-100 last:border-0">
+              <td class="px-6 py-3">
+                <div class="font-medium text-slate-900">{{ model.name }}</div>
+                <div class="text-xs text-slate-400">{{ model.slug }}</div>
+              </td>
+              <td class="px-6 py-3 text-right">
+                <div class="flex justify-end gap-2">
+                  <bo-button variant="ghost" size="sm" (click)="rename(model)">
+                    Umbenennen
+                  </bo-button>
+                  <bo-button variant="ghost" size="sm" (click)="remove(model)">
+                    Löschen
+                  </bo-button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

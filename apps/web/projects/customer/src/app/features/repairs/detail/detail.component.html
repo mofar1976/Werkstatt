@@ -1,0 +1,54 @@
+<div class="space-y-4">
+  <a routerLink="/repairs" class="text-sm text-brand-600 hover:underline">
+    ← Zurück zu meinen Reparaturen
+  </a>
+
+  @if (facade.detailError(); as error) {
+    <bo-alert variant="error">{{ error }}</bo-alert>
+  }
+
+  @if (facade.detailLoading() && !order()) {
+    <div class="flex justify-center rounded-xl border border-slate-200 bg-white p-10 text-sm text-slate-400">
+      <bo-spinner label="Lädt …" />
+    </div>
+  } @else if (order(); as o) {
+    <cu-repair-info [order]="o" />
+
+    @if (awaitingDecision()) {
+      <div class="rounded-xl border border-amber-200 bg-amber-50 p-6">
+        <p class="text-sm font-semibold text-amber-800">
+          Kostenvoranschlag wartet auf deine Freigabe
+        </p>
+        <p class="mt-1 text-sm text-amber-700">
+          Prüfe die Positionen unten. Nach der Freigabe beginnt die Werkstatt
+          mit der Reparatur.
+        </p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <bo-button
+            size="sm"
+            [loading]="facade.saving()"
+            (click)="approve()"
+          >
+            Freigeben
+          </bo-button>
+          <bo-button
+            variant="danger"
+            size="sm"
+            [loading]="facade.saving()"
+            (click)="reject()"
+          >
+            Ablehnen
+          </bo-button>
+        </div>
+      </div>
+    }
+
+    <cu-repair-progress [status]="o.status" />
+
+    @if (showQuote()) {
+      <cu-repair-quote [quote]="o.quote" />
+    }
+
+    <cu-repair-timeline [events]="o.timeline" />
+  }
+</div>

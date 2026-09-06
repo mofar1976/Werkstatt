@@ -1,0 +1,42 @@
+<div class="rounded-xl border border-slate-200 bg-white p-6">
+  <div class="flex flex-wrap items-start justify-between gap-3">
+    <div>
+      <h1 class="text-lg font-semibold text-slate-900">
+        {{ order().workshopName }}
+      </h1>
+      <p class="mt-1 text-sm text-slate-600">{{ vehicle(order()) }}</p>
+    </div>
+    <bo-badge [tone]="tone[order().status]">
+      {{ label[order().status] }}
+    </bo-badge>
+  </div>
+
+  <dl class="mt-6 grid gap-x-6 gap-y-4 text-sm sm:grid-cols-2">
+    <div class="sm:col-span-2">
+      <dt class="text-xs uppercase tracking-wide text-slate-400">
+        Dein gemeldetes Problem
+      </dt>
+      <dd class="whitespace-pre-line text-slate-700">
+        {{ order().problemDescription }}
+      </dd>
+    </div>
+
+    @if (order().cause; as cause) {
+      <div class="sm:col-span-2">
+        <dt class="text-xs uppercase tracking-wide text-slate-400">
+          Befund der Werkstatt
+        </dt>
+        <dd class="whitespace-pre-line text-slate-700">{{ cause }}</dd>
+      </div>
+    }
+
+    @if (order().cancelReason; as reason) {
+      <div class="sm:col-span-2">
+        <dt class="text-xs uppercase tracking-wide text-slate-400">
+          Stornierungsgrund
+        </dt>
+        <dd class="text-slate-700">{{ reason }}</dd>
+      </div>
+    }
+  </dl>
+</div>

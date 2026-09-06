@@ -1,0 +1,56 @@
+<div class="overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="border-b border-slate-200 text-left text-xs font-medium uppercase tracking-wide text-slate-400">
+        <th class="px-4 py-3">Angelegt</th>
+        <th class="px-4 py-3">Werkstatt</th>
+        <th class="px-4 py-3">Kund:in</th>
+        <th class="px-4 py-3">Fahrzeug</th>
+        <th class="px-4 py-3 text-right">Betrag</th>
+        <th class="px-4 py-3">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (order of orders(); track order.id) {
+        <tr class="border-b border-slate-100 last:border-0 hover:bg-slate-50">
+          <td class="px-4 py-3 whitespace-nowrap tabular-nums text-slate-700">
+            {{ order.createdAt | date: "dd.MM.yyyy" }}
+          </td>
+          <td class="px-4 py-3">
+            <a
+              [routerLink]="['/workshops', order.workshopId]"
+              class="font-medium text-slate-900 hover:text-brand-600"
+            >
+              {{ order.workshopName }}
+            </a>
+          </td>
+          <td class="px-4 py-3">
+            <a
+              [routerLink]="['/customers', order.customerId]"
+              class="text-slate-600 hover:text-brand-600"
+            >
+              @if (order.customer; as c) {
+                {{ c.firstName }} {{ c.lastName }}
+              } @else {
+                —
+              }
+            </a>
+          </td>
+          <td class="px-4 py-3 text-slate-600">{{ vehicle(order) }}</td>
+          <td class="px-4 py-3 text-right tabular-nums text-slate-700">
+            @if (order.quote.grossCents > 0) {
+              {{ eur(order.quote.grossCents) }}
+            } @else {
+              <span class="text-slate-400">—</span>
+            }
+          </td>
+          <td class="px-4 py-3">
+            <bo-badge [tone]="tone(order.status)">
+              {{ label[order.status] }}
+            </bo-badge>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

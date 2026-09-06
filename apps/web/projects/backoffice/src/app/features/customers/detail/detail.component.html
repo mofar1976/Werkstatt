@@ -1,0 +1,51 @@
+<div class="space-y-4">
+  <a routerLink="/customers" class="text-sm text-brand-600 hover:underline">
+    ← Zurück zur Liste
+  </a>
+
+  @if (facade.detailError(); as error) {
+    <bo-alert variant="error">{{ error }}</bo-alert>
+  }
+
+  @if (facade.detailLoading() && !customer()) {
+    <div class="flex justify-center rounded-xl border border-slate-200 bg-white p-10 text-sm text-slate-400">
+      <bo-spinner label="Lädt …" />
+    </div>
+  } @else if (customer(); as c) {
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <h1 class="text-lg font-semibold text-slate-900">
+          {{ c.firstName }} {{ c.lastName }}
+        </h1>
+        <p class="text-xs text-slate-400">{{ c.email }}</p>
+      </div>
+      <div class="flex items-center gap-2">
+        @if (!editing()) {
+          <bo-button variant="secondary" size="sm" (click)="editing.set(true)">
+            Bearbeiten
+          </bo-button>
+        }
+        <bo-button
+          variant="secondary"
+          size="sm"
+          [loading]="facade.saving()"
+          (click)="toggleBlocked()"
+        >
+          {{ c.isActive ? "Sperren" : "Entsperren" }}
+        </bo-button>
+        <bo-button variant="danger" size="sm" (click)="remove()">Löschen</bo-button>
+      </div>
+    </div>
+
+    @if (editing()) {
+      <bo-customer-edit
+        [customer]="c"
+        [saving]="facade.saving()"
+        (save)="save($event)"
+        (cancel)="editing.set(false)"
+      />
+    } @else {
+      <bo-customer-info [customer]="c" />
+    }
+  }
+</div>

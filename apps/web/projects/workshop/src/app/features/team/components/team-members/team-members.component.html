@@ -1,0 +1,153 @@
+<div class="rounded-xl border border-slate-200 bg-white">
+  <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+    <div>
+      <h2 class="text-sm font-semibold text-slate-900">Mitarbeitende</h2>
+      <p class="text-xs text-slate-400">
+        {{ members().length }} {{ members().length === 1 ? "Person" : "Personen" }}
+      </p>
+    </div>
+    @if (canManage()) {
+      <bo-button
+        variant="secondary"
+        size="sm"
+        (click)="showAddForm.set(!showAddForm())"
+      >
+        {{ showAddForm() ? "Abbrechen" : "Mitarbeiter hinzufügen" }}
+      </bo-button>
+    }
+  </div>
+
+  @if (canManage() && showAddForm()) {
+    <form
+      class="grid gap-4 border-b border-slate-100 bg-slate-50 px-6 py-5 sm:grid-cols-2"
+      [formGroup]="addForm"
+      (ngSubmit)="add()"
+    >
+      <bo-text-field [control]="addForm.controls.firstName" label="Vorname" />
+      <bo-text-field [control]="addForm.controls.lastName" label="Nachname" />
+      <bo-text-field [control]="addForm.controls.email" label="E-Mail" type="email" icon="mail" />
+      <bo-text-field
+        [control]="addForm.controls.password"
+        label="Initiales Passwort"
+        type="password"
+        icon="lock"
+      />
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-slate-700" for="add-role">Rolle</label>
+        <select
+          id="add-role"
+          formControlName="role"
+          class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+        >
+          <option [value]="WorkshopRole.MEMBER">Mechaniker</option>
+          <option [value]="WorkshopRole.CHEF">Chef</option>
+        </select>
+      </div>
+      <div class="flex items-end">
+        <bo-button type="submit" size="sm" [loading]="facade.saving()">
+          Hinzufügen
+        </bo-button>
+      </div>
+    </form>
+  }
+
+  @if (members().length === 0) {
+    <p class="px-6 py-8 text-center text-sm text-slate-500">
+      Noch keine Mitarbeitenden.
+    </p>
+  } @else {
+    <div class="divide-y divide-slate-100">
+      @for (member of members(); track member.id) {
+        @if (editingId() === member.id) {
+          <form
+            class="grid gap-4 bg-slate-50 px-6 py-5 sm:grid-cols-2"
+            [formGroup]="editForm"
+            (ngSubmit)="saveEdit(member)"
+          >
+            <bo-text-field [control]="editForm.controls.firstName" label="Vorname" />
+            <bo-text-field [control]="editForm.controls.lastName" label="Nachname" />
+            <bo-text-field [control]="editForm.controls.phone" label="Telefon" type="tel" />
+            @if (!isSelf(member)) {
+              <div>
+                <label class="mb-1.5 block text-sm font-medium text-slate-700" for="edit-role">Rolle</label>
+                <select
+                  id="edit-role"
+                  formControlName="role"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                >
+                  <option [value]="WorkshopRole.MEMBER">Mechaniker</option>
+                  <option [value]="WorkshopRole.CHEF">Chef</option>
+                </select>
+              </div>
+            }
+            <p class="text-xs text-slate-400 sm:col-span-2">
+              Die E-Mail-Adresse ({{ member.user.email }}) kann nicht geändert werden.
+            </p>
+            <div class="flex items-center gap-3">
+              <bo-button type="submit" size="sm" [loading]="facade.saving()">Speichern</bo-button>
+              <button
+                type="button"
+                class="text-sm text-slate-500 hover:text-slate-700"
+                (click)="cancelEdit()"
+              >
+                Abbrechen
+              </button>
+            </div>
+          </form>
+        } @else {
+          <div class="flex flex-wrap items-center gap-3 px-6 py-3">
+            <div class="min-w-0 flex-1">
+              <div class="font-medium text-slate-900">
+                {{ member.user.firstName }} {{ member.user.lastName }}
+                @if (isSelf(member)) {
+                  <span class="text-xs font-normal text-slate-400">(du)</span>
+                }
+              </div>
+              <div class="text-xs text-slate-400">
+                {{ member.user.email }}
+                @if (member.user.phone) {
+                  <span>· {{ member.user.phone }}</span>
+                }
+              </div>
+            </div>
+
+            <bo-badge [tone]="member.role === WorkshopRole.CHEF ? 'blue' : 'gray'">
+              {{ member.role === WorkshopRole.CHEF ? "Chef" : "Mechaniker" }}
+            </bo-badge>
+
+            @if (canManage()) {
+              <div class="flex justify-end gap-2">
+                <bo-button
+                  variant="ghost"
+                  size="sm"
+                  [disabled]="facade.saving()"
+                  (click)="startEdit(member)"
+                >
+                  Bearbeiten
+                </bo-button>
+                @if (!isSelf(member)) {
+                  <bo-button
+                    variant="ghost"
+                    size="sm"
+                    [disabled]="facade.saving()"
+                    (click)="toggleRole(member)"
+                  >
+                    {{ member.role === WorkshopRole.CHEF ? "Zu Mechaniker" : "Zum Chef" }}
+                  </bo-button>
+                  <bo-button
+                    variant="ghost"
+                    size="sm"
+                    [disabled]="facade.saving()"
+                    (click)="remove(member)"
+                  >
+                    Entfernen
+                  </bo-button>
+                }
+              </div>
+            }
+          </div>
+        }
+      }
+    </div>
+  }
+</div>

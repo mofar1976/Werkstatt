@@ -1,0 +1,37 @@
+<div class="rounded-xl border border-slate-200 bg-white p-6">
+  <h3 class="text-sm font-semibold text-slate-900">Zuständige Mitarbeitende</h3>
+
+  @if (members().length === 0) {
+    <p class="mt-3 text-sm text-slate-400">Kein Team gefunden.</p>
+  } @else {
+    <div class="mt-3 flex flex-wrap gap-2">
+      @for (member of members(); track member.id) {
+        <label
+          class="inline-flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-1.5 text-sm"
+          [class]="isPicked(member.id)
+            ? 'border-brand-300 bg-brand-50 text-brand-700'
+            : 'border-slate-300 text-slate-600 hover:bg-slate-50'"
+          [class.pointer-events-none]="disabled()"
+          [class.opacity-50]="disabled()"
+        >
+          <input
+            type="checkbox"
+            class="sr-only"
+            [checked]="isPicked(member.id)"
+            [disabled]="disabled()"
+            (change)="toggle(member.id)"
+          />
+          {{ member.firstName }} {{ member.lastName }}
+        </label>
+      }
+    </div>
+
+    @if (dirty() && !disabled()) {
+      <div class="mt-3">
+        <bo-button size="sm" [loading]="saving()" (click)="submit()">
+          Zuweisung übernehmen
+        </bo-button>
+      </div>
+    }
+  }
+</div>

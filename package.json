@@ -1,0 +1,22 @@
+{
+  "name": "car-garage",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Digital workshop platform: find a car repair shop, book an appointment, follow the repair process on a status timeline.",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "infra:up": "docker compose up -d",
+    "infra:down": "docker compose down"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.3"
+  }
+}
